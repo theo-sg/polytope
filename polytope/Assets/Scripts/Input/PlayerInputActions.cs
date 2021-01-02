@@ -73,7 +73,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""c5acae1c-0890-4e30-892d-80892b7c08e4"",
                     ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press,Hold"",
                     ""processors"": """",
                     ""groups"": ""PC"",
                     ""action"": ""Space"",
