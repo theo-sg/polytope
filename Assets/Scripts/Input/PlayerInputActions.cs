@@ -32,7 +32,15 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""id"": ""05ca8b32-e8dd-4b25-af99-27e1fa11e362"",
                     ""expectedControlType"": ""Analog"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Tap""
+                },
+                {
+                    ""name"": ""HoldSpace"",
+                    ""type"": ""Value"",
+                    ""id"": ""366ae7e5-7794-4343-bd7d-0ddc30cabe3f"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.2)""
                 }
             ],
             ""bindings"": [
@@ -73,10 +81,21 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""c5acae1c-0890-4e30-892d-80892b7c08e4"",
                     ""path"": ""<Keyboard>/space"",
-                    ""interactions"": ""Press,Hold"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PC"",
                     ""action"": ""Space"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a90e9148-376e-4331-bc4d-61e22d5c6471"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldSpace"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -106,6 +125,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_AD = m_Movement.FindAction("AD", throwIfNotFound: true);
         m_Movement_Space = m_Movement.FindAction("Space", throwIfNotFound: true);
+        m_Movement_HoldSpace = m_Movement.FindAction("HoldSpace", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -157,12 +177,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private IMovementActions m_MovementActionsCallbackInterface;
     private readonly InputAction m_Movement_AD;
     private readonly InputAction m_Movement_Space;
+    private readonly InputAction m_Movement_HoldSpace;
     public struct MovementActions
     {
         private @PlayerInputActions m_Wrapper;
         public MovementActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @AD => m_Wrapper.m_Movement_AD;
         public InputAction @Space => m_Wrapper.m_Movement_Space;
+        public InputAction @HoldSpace => m_Wrapper.m_Movement_HoldSpace;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -178,6 +200,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Space.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnSpace;
                 @Space.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnSpace;
                 @Space.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnSpace;
+                @HoldSpace.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnHoldSpace;
+                @HoldSpace.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnHoldSpace;
+                @HoldSpace.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnHoldSpace;
             }
             m_Wrapper.m_MovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -188,6 +213,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Space.started += instance.OnSpace;
                 @Space.performed += instance.OnSpace;
                 @Space.canceled += instance.OnSpace;
+                @HoldSpace.started += instance.OnHoldSpace;
+                @HoldSpace.performed += instance.OnHoldSpace;
+                @HoldSpace.canceled += instance.OnHoldSpace;
             }
         }
     }
@@ -205,5 +233,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     {
         void OnAD(InputAction.CallbackContext context);
         void OnSpace(InputAction.CallbackContext context);
+        void OnHoldSpace(InputAction.CallbackContext context);
     }
 }

@@ -28,18 +28,18 @@ public class PlayerController : MonoBehaviour
     public float airSteer;
     [Range(0, 1)]
     public float groundSteer;
+    public float highJump;
 
     /// <summary>
     /// initialises the input actions
     /// </summary>
     private void OnEnable()
     {
-        inputActions = new PlayerInputActions();
-        
         //set each relevant input action
+        inputActions = new PlayerInputActions();
         inputActions.Movement.AD.performed += ctx => LR = ctx.ReadValue<float>();
         inputActions.Movement.Space.performed += Jump;
-
+        inputActions.Movement.HoldSpace.performed += Jump;
         inputActions.Enable();
 
         rb = GetComponent<Rigidbody2D>();
@@ -72,10 +72,12 @@ public class PlayerController : MonoBehaviour
     /// <param name="context">input context</param>
     private void Jump(InputAction.CallbackContext context)
     {
+        Debug.Log(context.interaction);
         //TODO - implement variable jump height based on hold/press of space bar
         if (isGrounded)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, movementScalar.y);
+        {            
+            rb.velocity = new Vector2(rb.velocity.x,
+                          (context.interaction is HoldInteraction) ? movementScalar.y * highJump : movementScalar.y);
         }
     }
 

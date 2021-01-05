@@ -19,7 +19,15 @@
                     "id": "05ca8b32-e8dd-4b25-af99-27e1fa11e362",
                     "expectedControlType": "Analog",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Tap"
+                },
+                {
+                    "name": "HoldSpace",
+                    "type": "Value",
+                    "id": "366ae7e5-7794-4343-bd7d-0ddc30cabe3f",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.2)"
                 }
             ],
             "bindings": [
@@ -60,10 +68,21 @@
                     "name": "",
                     "id": "c5acae1c-0890-4e30-892d-80892b7c08e4",
                     "path": "<Keyboard>/space",
-                    "interactions": "Press,Hold",
+                    "interactions": "",
                     "processors": "",
                     "groups": "PC",
                     "action": "Space",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a90e9148-376e-4331-bc4d-61e22d5c6471",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldSpace",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
