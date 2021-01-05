@@ -25,10 +25,10 @@ public class PlayerController : MonoBehaviour
     //### player initialisation variables ###
     public Vector2 movementScalar = new Vector2();
     [Range(0, 1)]
-    public float airSteer;
+    public float airSteer = 0.1f;
     [Range(0, 1)]
-    public float groundSteer;
-    public float highJump;
+    public float groundSteer = 0.7f;
+    public float highJump = 1.4f;
 
     /// <summary>
     /// initialises the input actions
@@ -72,8 +72,6 @@ public class PlayerController : MonoBehaviour
     /// <param name="context">input context</param>
     private void Jump(InputAction.CallbackContext context)
     {
-        Debug.Log(context.interaction);
-        //TODO - implement variable jump height based on hold/press of space bar
         if (isGrounded)
         {            
             rb.velocity = new Vector2(rb.velocity.x,
