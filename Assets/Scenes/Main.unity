@@ -1447,10 +1447,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrounded: 0
+  playerState: 0
   movementScalar: {x: 5, y: 5}
   airSteer: 0.1
   groundSteer: 0.7
-  highJump: 1.4
+  highJump: 1.6
 --- !u!4 &1654327213
 Transform:
   m_ObjectHideFlags: 0

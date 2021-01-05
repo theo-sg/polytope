@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     //### player states ###
     public bool isGrounded;
 
+    //[HideInInspector]
+    public PlayerState playerState;
+
     //### player initialisation variables ###
     public Vector2 movementScalar = new Vector2();
     [Range(0, 1)]
@@ -54,6 +57,7 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = TestForGround();
         ApplyMotion();
+        playerState = SetState();
     }
 
     /// <summary>
@@ -61,6 +65,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void ApplyMotion()
     {
+
         //if in the air, controls will feel more sluggish due to drag
         rb.velocity = new Vector2(  Mathf.Lerp(rb.velocity.x, LR * movementScalar.x, (isGrounded) ? groundSteer : airSteer), 
                                     rb.velocity.y );
@@ -90,4 +95,30 @@ public class PlayerController : MonoBehaviour
         return (hit.collider != null) ? true : false;
     }
 
+    /// <summary>
+    /// sets the player state 
+    /// </summary>
+    /// <returns>the current player state</returns>
+    PlayerState SetState()
+    {
+        if (!isGrounded)
+        {
+            return PlayerState.InAir;
+        }
+        else if (Mathf.Abs(LR) > 0)
+        {
+            return PlayerState.Walking;
+        }
+        else
+        {
+            return PlayerState.Idle;
+        }
+    }
+}
+
+public enum PlayerState
+{
+    Idle,
+    Walking,
+    InAir
 }
