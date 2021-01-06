@@ -7,31 +7,23 @@ using UnityEngine.InputSystem.Interactions;
 public class PlayerController : MonoBehaviour
 {
     //### object references ###
-    /// <summary>
-    /// the control scheme
-    /// </summary>
     PlayerInputActions inputActions;
-
     Rigidbody2D rb;
-
-    /// <summary>
-    /// the horizontal input axis
-    /// </summary>
     float LR;
 
+    [Header("Player State")]
     //### player states ###
     public bool isGrounded;
-
-    //[HideInInspector]
     public PlayerState playerState;
-
+  
     //### player initialisation variables ###
-    public Vector2 movementScalar = new Vector2();
-    [Range(0, 1)]
-    public float airSteer = 0.1f;
-    [Range(0, 1)]
-    public float groundSteer = 0.7f;
-    public float highJump = 1.4f;
+    private Vector2 groundCheckBox = new Vector2(0.6f, 0.2f);
+    [HideInInspector]   public Vector2 movementScalar = new Vector2();
+    [Header("Player Variables")]
+    [Range(0, 1)]       public float airSteer = 0.1f;
+    [Range(0, 1)]       public float groundSteer = 0.7f;
+    [Range(1, 2)]       public float highJump = 1.4f;
+    
 
     /// <summary>
     /// initialises the input actions
@@ -89,9 +81,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <returns>whether the player is grounded</returns>
     public bool TestForGround()
-    {
-        Debug.DrawRay(transform.position, Vector2.down * 0.51f, Color.red);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.51f, 1 << LayerMask.NameToLayer("Ground"));
+    {        
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, groundCheckBox, 0, Vector2.down, 0.5f, 1 << LayerMask.NameToLayer("Ground"));       
         return (hit.collider != null) ? true : false;
     }
 
