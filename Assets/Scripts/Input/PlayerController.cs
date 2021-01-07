@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     //### player states ###
     public bool isGrounded;
     public PlayerState playerState;
+    public PlayerWallState playerWallState;
   
     //### player initialisation variables ###
     private Vector2 groundCheckBox = new Vector2(0.6f, 0.2f);
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     [Range(0, 1)]       public float airSteer = 0.1f;
     [Range(0, 1)]       public float groundSteer = 0.7f;
     [Range(1, 2)]       public float highJump = 1.4f;
+    [Range(10, 50)]     public float wallJump = 25f;
     
 
     /// <summary>
@@ -48,6 +50,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         isGrounded = TestForGround();
+        playerWallState = TestForWalls();
         ApplyMotion();
         playerState = SetState();
     }
@@ -69,10 +72,18 @@ public class PlayerController : MonoBehaviour
     /// <param name="context">input context</param>
     private void Jump(InputAction.CallbackContext context)
     {
+        //regular jump
         if (isGrounded)
         {            
             rb.velocity = new Vector2(rb.velocity.x,
                           (context.interaction is HoldInteraction) ? movementScalar.y * highJump : movementScalar.y);
+        }
+        //wall jump
+        else if (!isGrounded && playerWallState != PlayerWallState.None)
+        {
+            rb.velocity = new Vector2((playerWallState == PlayerWallState.Right) ? -wallJump : wallJump, 
+                          movementScalar.y * 1.2f);
+
         }
     }
 
@@ -80,17 +91,28 @@ public class PlayerController : MonoBehaviour
     /// check to see if the player is on the ground
     /// </summary>
     /// <returns>whether the player is grounded</returns>
-    public bool TestForGround()
+    private bool TestForGround()
     {        
         RaycastHit2D hit = Physics2D.BoxCast(transform.position, groundCheckBox, 0, Vector2.down, 0.5f, 1 << LayerMask.NameToLayer("Ground"));       
         return (hit.collider != null) ? true : false;
     }
 
     /// <summary>
+    /// tests whether the player is in contact with a wall
+    /// </summary>
+    /// <returns>the position of the wall (left, right or no wall)</returns>
+    private PlayerWallState TestForWalls()
+    {
+        RaycastHit2D lHit = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 1 << LayerMask.NameToLayer("Ground"));
+        RaycastHit2D rHit = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 1 << LayerMask.NameToLayer("Ground"));
+        return (lHit.collider != null) ? PlayerWallState.Left : ( (rHit.collider != null) ? PlayerWallState.Right : PlayerWallState.None );
+    }
+
+    /// <summary>
     /// sets the player state 
     /// </summary>
     /// <returns>the current player state</returns>
-    PlayerState SetState()
+    private PlayerState SetState()
     {
         if (!isGrounded)
         {
@@ -112,4 +134,11 @@ public enum PlayerState
     Idle,
     Walking,
     InAir
+}
+
+public enum PlayerWallState
+{
+    Left,
+    None,
+    Right
 }
