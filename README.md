@@ -1,3 +1,4 @@
+![it comes](!Resources/Logos/RedOctahedronRotating_Text.gif)
 # polytope
 POLYTOPE is a 2D action adventure puzzle platformer game that mixes interesting mechanics with a darkly humorous storyline.
 
