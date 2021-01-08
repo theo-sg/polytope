@@ -9,18 +9,18 @@ public class PlayerController : MonoBehaviour
     //### object references ###
     PlayerInputActions inputActions;
     Rigidbody2D rb;
-    float LR;
 
     [Header("Player State")]
     //### player states ###
+    private float LR;
     public bool isGrounded;
     public PlayerState playerState;
     public PlayerWallState playerWallState;
   
-    //### player initialisation variables ###
+    //### player properties ###
     private Vector2 groundCheckBox = new Vector2(0.6f, 0.2f);
     [HideInInspector]   public Vector2 movementScalar = new Vector2();
-    [Header("Player Variables")]
+    [Header("Player Properties")]
     [Range(0, 1)]       public float airSteer = 0.1f;
     [Range(0, 1)]       public float groundSteer = 0.7f;
     [Range(1, 2)]       public float highJump = 1.4f;

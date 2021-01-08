@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    [Header("Camera References")]
     //### object references ###
     /// <summary>
     /// the currently followed object
     /// </summary>
     public Transform target;
 
-    //### camera initialisation variables
+    [Header("Camera Properties")]
+    //### object properties
     /// <summary>
     /// position offset to account for the 2D plane
     /// </summary>
-    [HideInInspector]
-    public Vector3 offset = new Vector3(0, 0, -10);
+    [HideInInspector]   public Vector3 offset = new Vector3(0, 0, -10);
 
     /// <summary>
     /// interpolation factor
     /// </summary>
-    [Range(0, 1)]
-    public float dampen;
+    [Range(0, 1)]       public float dampen;
 
     //### singleton ###
     public static CameraController Instance;

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class BouncePadBehaviour : MonoBehaviour
 {
-    [Range(1, 20)] public float strength = 10f;
+    [Header("Object Properties")]
+    //### object properties ###
+    [Range(2, 15)] public float strength = 10f;
     public bool omnidirectional = false;
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -25,9 +27,7 @@ public class BouncePadBehaviour : MonoBehaviour
     /// <param name="rb">the contact rigibody</param>
     private void Bounce(Rigidbody2D rb)
     {
-
         Vector2 k = rb.position - (Vector2) transform.position;
-        //if the bounce pad is vertical only
         if (omnidirectional)
         {
             //¯\_(ツ)_/¯
