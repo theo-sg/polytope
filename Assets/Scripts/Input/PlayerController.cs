@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     //### player states ###
     private float LR;
     public bool isGrounded;
+    public bool isAttachedToWall;
     public PlayerState playerState;
     public PlayerWallState playerWallState;
   
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour
     {
         //set each relevant input action
         inputActions = new PlayerInputActions();
-        inputActions.Movement.AD.performed += ctx => LR = ctx.ReadValue<float>();
+        inputActions.Movement.AD.performed += ctx => { LR = ctx.ReadValue<float>(); };
         inputActions.Movement.Space.performed += Jump;
         inputActions.Movement.HoldSpace.performed += Jump;
         inputActions.Enable();
@@ -50,9 +51,12 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         isGrounded = TestForGround();
-        playerWallState = TestForWalls();
-        ApplyMotion();
         playerState = SetState();
+        playerWallState = TestForWalls();
+
+        if (playerWallState != PlayerWallState.None) SetAttachmentToWall();
+        CheckForWallDetach();
+        ApplyMotion();
     }
 
     /// <summary>
@@ -60,12 +64,14 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void ApplyMotion()
     {
-
-        //if in the air, controls will feel more sluggish due to drag
-        rb.velocity = new Vector2(  Mathf.Lerp(rb.velocity.x, LR * movementScalar.x, (isGrounded) ? groundSteer : airSteer), 
-                                    rb.velocity.y );
+        if (!isAttachedToWall)
+        {
+            //if in the air, controls will feel more sluggish due to drag
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, LR * movementScalar.x, (isGrounded) ? groundSteer : airSteer),
+                                        rb.velocity.y);
+        }       
     }
-    
+        
     /// <summary>
     /// perform the action of jumping
     /// </summary>
@@ -85,6 +91,81 @@ public class PlayerController : MonoBehaviour
                           movementScalar.y * 1.2f);
 
         }
+    }
+
+    /// <summary>
+    /// set the current attached to wall state
+    /// </summary>
+    private void SetAttachmentToWall()
+    {
+        //we know that PlayerWallState != None
+        if (!isGrounded)
+        {
+            //if Left && LR left, attach
+            //if Left && LR right, detach
+            if (playerWallState == PlayerWallState.Left)
+            {
+                if(LR < -0.1f)
+                {
+                    AttachToWall();
+                }
+                else if (LR > 0.1f)
+                {
+                    DetachFromWall();
+                }
+            }
+            //if Right && LR right, attach
+            //if Right && LR left, detach
+            else if (playerWallState == PlayerWallState.Right)
+            {
+                if (LR > 0.1f)
+                {
+                    AttachToWall();
+                }
+                else if (LR < -0.1f)
+                {
+                    DetachFromWall();
+                }
+            }                       
+        }
+    }
+
+    /// <summary>
+    /// some criteria where the player will detach from a wall
+    /// </summary>
+    private void CheckForWallDetach()
+    {
+        //hit ground? detach
+        //slip off of bottom of wall? detach
+        if (isGrounded || (playerWallState == PlayerWallState.None && isAttachedToWall) )
+        {
+            DetachFromWall();
+        }
+    }
+
+    /// <summary>
+    /// attach the player to a wall
+    /// </summary>
+    private void AttachToWall()
+    {
+        if(!isAttachedToWall)
+        {
+            isAttachedToWall = true;
+            rb.velocity = new Vector2(0, 0);
+            rb.gravityScale = 0.05f;
+        }
+    }
+
+    /// <summary>
+    /// detach the player from a wall
+    /// </summary>
+    private void DetachFromWall()
+    {
+        if (isAttachedToWall)
+        {
+            isAttachedToWall = false;
+            rb.gravityScale = 1f;
+        }        
     }
 
     /// <summary>
@@ -114,6 +195,10 @@ public class PlayerController : MonoBehaviour
     /// <returns>the current player state</returns>
     private PlayerState SetState()
     {
+        if (isAttachedToWall)
+        {
+            return PlayerState.OnWall;
+        }
         if (!isGrounded)
         {
             return PlayerState.InAir;
@@ -133,7 +218,8 @@ public enum PlayerState
 {
     Idle,
     Walking,
-    InAir
+    InAir,
+    OnWall
 }
 
 public enum PlayerWallState
