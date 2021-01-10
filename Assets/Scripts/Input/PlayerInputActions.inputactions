@@ -14,6 +14,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "S",
+                    "type": "Value",
+                    "id": "137e9b14-da80-4dff-b4fe-abc2528f5d6f",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.2)"
+                },
+                {
                     "name": "Space",
                     "type": "Value",
                     "id": "05ca8b32-e8dd-4b25-af99-27e1fa11e362",
@@ -83,6 +91,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "HoldSpace",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "94a23811-3fe0-40ea-8eb2-0672440f6319",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "S",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

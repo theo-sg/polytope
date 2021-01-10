@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private float LR;
     public bool isGrounded;
     public bool isAttachedToWall;
+    private bool canAttachToWall = true;
     public PlayerState playerState;
     public PlayerWallState playerWallState;
   
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
         //set each relevant input action
         inputActions = new PlayerInputActions();
         inputActions.Movement.AD.performed += ctx => { LR = ctx.ReadValue<float>(); };
+        inputActions.Movement.S.performed += ctx => { if (playerState == PlayerState.OnWall) { canAttachToWall = false; DetachFromWall(); } };
         inputActions.Movement.Space.performed += Jump;
         inputActions.Movement.HoldSpace.performed += Jump;
         inputActions.Enable();
@@ -54,8 +56,8 @@ public class PlayerController : MonoBehaviour
         playerState = SetState();
         playerWallState = TestForWalls();
 
-        if (playerWallState != PlayerWallState.None) SetAttachmentToWall();
-        CheckForWallDetach();
+        //TODO - event based system
+        SetAttachmentToWall();
         ApplyMotion();
     }
 
@@ -85,10 +87,12 @@ public class PlayerController : MonoBehaviour
                           (context.interaction is HoldInteraction) ? movementScalar.y * highJump : movementScalar.y);
         }
         //wall jump
-        else if (!isGrounded && playerWallState != PlayerWallState.None)
+        else if (!isGrounded && isAttachedToWall)
         {
             rb.velocity = new Vector2((playerWallState == PlayerWallState.Right) ? -wallJump : wallJump, 
                           movementScalar.y * 1.2f);
+
+            canAttachToWall = true;
 
         }
     }
@@ -98,49 +102,24 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void SetAttachmentToWall()
     {
-        //we know that PlayerWallState != None
-        if (!isGrounded)
+        //TODO - event based system here
+        //if the player is on the ground
+        if (isGrounded)
         {
-            //if Left && LR left, attach
-            //if Left && LR right, detach
-            if (playerWallState == PlayerWallState.Left)
-            {
-                if(LR < -0.1f)
-                {
-                    AttachToWall();
-                }
-                else if (LR > 0.1f)
-                {
-                    DetachFromWall();
-                }
-            }
-            //if Right && LR right, attach
-            //if Right && LR left, detach
-            else if (playerWallState == PlayerWallState.Right)
-            {
-                if (LR > 0.1f)
-                {
-                    AttachToWall();
-                }
-                else if (LR < -0.1f)
-                {
-                    DetachFromWall();
-                }
-            }                       
+            if (canAttachToWall == false)   canAttachToWall = true;
+            if (isAttachedToWall)           DetachFromWall();
         }
-    }
-
-    /// <summary>
-    /// some criteria where the player will detach from a wall
-    /// </summary>
-    private void CheckForWallDetach()
-    {
-        //hit ground? detach
-        //slip off of bottom of wall? detach
-        if (isGrounded || (playerWallState == PlayerWallState.None && isAttachedToWall) )
+        //else if the player slips off the bottom of a wall
+        else if (playerWallState == PlayerWallState.None && isAttachedToWall)
         {
             DetachFromWall();
+            canAttachToWall = true;
         }
+        //now the player can attach to walls
+        else if (playerWallState != PlayerWallState.None)
+        {
+            AttachToWall();
+        }                     
     }
 
     /// <summary>
@@ -148,7 +127,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void AttachToWall()
     {
-        if(!isAttachedToWall)
+        if(!isAttachedToWall && canAttachToWall)
         {
             isAttachedToWall = true;
             rb.velocity = new Vector2(0, 0);
@@ -184,8 +163,8 @@ public class PlayerController : MonoBehaviour
     /// <returns>the position of the wall (left, right or no wall)</returns>
     private PlayerWallState TestForWalls()
     {
-        RaycastHit2D lHit = Physics2D.Raycast(transform.position, Vector2.left, 0.6f, 1 << LayerMask.NameToLayer("Ground"));
-        RaycastHit2D rHit = Physics2D.Raycast(transform.position, Vector2.right, 0.6f, 1 << LayerMask.NameToLayer("Ground"));
+        RaycastHit2D lHit = Physics2D.Raycast(transform.position, Vector2.left, 0.51f, 1 << LayerMask.NameToLayer("Ground"));
+        RaycastHit2D rHit = Physics2D.Raycast(transform.position, Vector2.right, 0.51f, 1 << LayerMask.NameToLayer("Ground"));
         return (lHit.collider != null) ? PlayerWallState.Left : ( (rHit.collider != null) ? PlayerWallState.Right : PlayerWallState.None );
     }
 

@@ -27,6 +27,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""S"",
+                    ""type"": ""Value"",
+                    ""id"": ""137e9b14-da80-4dff-b4fe-abc2528f5d6f"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.2)""
+                },
+                {
                     ""name"": ""Space"",
                     ""type"": ""Value"",
                     ""id"": ""05ca8b32-e8dd-4b25-af99-27e1fa11e362"",
@@ -98,6 +106,17 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""HoldSpace"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94a23811-3fe0-40ea-8eb2-0672440f6319"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""S"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -124,6 +143,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_AD = m_Movement.FindAction("AD", throwIfNotFound: true);
+        m_Movement_S = m_Movement.FindAction("S", throwIfNotFound: true);
         m_Movement_Space = m_Movement.FindAction("Space", throwIfNotFound: true);
         m_Movement_HoldSpace = m_Movement.FindAction("HoldSpace", throwIfNotFound: true);
     }
@@ -176,6 +196,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Movement;
     private IMovementActions m_MovementActionsCallbackInterface;
     private readonly InputAction m_Movement_AD;
+    private readonly InputAction m_Movement_S;
     private readonly InputAction m_Movement_Space;
     private readonly InputAction m_Movement_HoldSpace;
     public struct MovementActions
@@ -183,6 +204,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         private @PlayerInputActions m_Wrapper;
         public MovementActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @AD => m_Wrapper.m_Movement_AD;
+        public InputAction @S => m_Wrapper.m_Movement_S;
         public InputAction @Space => m_Wrapper.m_Movement_Space;
         public InputAction @HoldSpace => m_Wrapper.m_Movement_HoldSpace;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
@@ -197,6 +219,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @AD.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnAD;
                 @AD.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnAD;
                 @AD.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnAD;
+                @S.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnS;
+                @S.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnS;
+                @S.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnS;
                 @Space.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnSpace;
                 @Space.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnSpace;
                 @Space.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnSpace;
@@ -210,6 +235,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @AD.started += instance.OnAD;
                 @AD.performed += instance.OnAD;
                 @AD.canceled += instance.OnAD;
+                @S.started += instance.OnS;
+                @S.performed += instance.OnS;
+                @S.canceled += instance.OnS;
                 @Space.started += instance.OnSpace;
                 @Space.performed += instance.OnSpace;
                 @Space.canceled += instance.OnSpace;
@@ -232,6 +260,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     public interface IMovementActions
     {
         void OnAD(InputAction.CallbackContext context);
+        void OnS(InputAction.CallbackContext context);
         void OnSpace(InputAction.CallbackContext context);
         void OnHoldSpace(InputAction.CallbackContext context);
     }
