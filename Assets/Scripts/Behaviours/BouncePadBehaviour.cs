@@ -11,23 +11,24 @@ public class BouncePadBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Character"))
+        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Entity"))
         {          
             Rigidbody2D rb = collision.collider.gameObject.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                Bounce(rb);
+                Bounce(rb, collision.GetContact(0));
             }
-        }
+        }        
     }
 
     /// <summary>
     /// applies a force to the contact rigidbody
     /// </summary>
     /// <param name="rb">the contact rigibody</param>
-    private void Bounce(Rigidbody2D rb)
+    private void Bounce(Rigidbody2D rb, ContactPoint2D ct)
     {
-        Vector2 k = rb.position - (Vector2) transform.position;
+        Vector2 k = rb.position - ct.point;
+        Vector2 colliderSize = this.GetComponent<BoxCollider2D>().size;
         if (omnidirectional)
         {
             //¯\_(ツ)_/¯
@@ -37,10 +38,9 @@ public class BouncePadBehaviour : MonoBehaviour
         else
         {
             //if the player is above the pad
-            //this value is probably better off calculated to be honest as height of player / 2 + height of pad / 2
-            //perhaps some standard player height = 0.9f
-            //        vv
-            if(k.y >= (this.GetComponent<BoxCollider2D>().size.y / 2) + (rb.GetComponent<CircleCollider2D>().radius))
+            // |kx| will be less than or equal to the width of the collider - a small amount to stop corner hits / 2
+            // ky will be more than or equal to the height of the collider / 2
+            if(Mathf.Abs(k.x) <= (colliderSize.x - 0.3f) / 2 && k.y >= colliderSize.y / 2)
             {
                 rb.AddForce(Vector2.up * strength, ForceMode2D.Impulse);
             }

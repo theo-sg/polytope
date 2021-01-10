@@ -2710,9 +2710,9 @@ GameObject:
   - component: {fileID: 1654327212}
   - component: {fileID: 1654327215}
   - component: {fileID: 1654327214}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
-  m_TagString: Character
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2730,6 +2730,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrounded: 0
+  isAttachedToWall: 0
+  canAttachToWall: 1
   playerState: 0
   playerWallState: 0
   movementScalar: {x: 5, y: 5}
@@ -2965,7 +2967,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1704762123}
   - component: {fileID: 1704762124}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: '!SANDBOX_player'
   m_TagString: Untagged
   m_Icon: {fileID: 0}

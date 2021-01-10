@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
     /// <returns>whether the player is grounded</returns>
     private bool TestForGround()
     {        
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position, groundCheckBox, 0, Vector2.down, 0.5f, 1 << LayerMask.NameToLayer("Ground"));       
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, groundCheckBox, 0, Vector2.down, 0.6f, 1 << LayerMask.NameToLayer("Ground"));       
         return (hit.collider != null) ? true : false;
     }
 
