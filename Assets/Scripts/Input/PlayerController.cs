@@ -10,12 +10,25 @@ public class PlayerController : MonoBehaviour
     PlayerInputActions inputActions;
     Rigidbody2D rb;
 
-    [Header("Player State")]
     //### player states ###
     private float LR;
-    public bool isGrounded;
-    public bool isAttachedToWall;
-    private bool canAttachToWall = true;
+    [Header("Player State")]
+    [SerializeField]    private bool isGrounded;
+    public bool IsGrounded
+    {
+        get { return isGrounded; }
+        set
+        {
+            isGrounded = value;
+            if (value == true)
+            {
+                canAttachToWall = true;
+                DetachFromWall();
+            }           
+        }
+    }
+    [SerializeField]    private bool isAttachedToWall;
+    [SerializeField]    private bool canAttachToWall = true;
     public PlayerState playerState;
     public PlayerWallState playerWallState;
   
@@ -29,18 +42,9 @@ public class PlayerController : MonoBehaviour
     [Range(10, 50)]     public float wallJump = 25f;
     
 
-    /// <summary>
-    /// initialises the input actions
-    /// </summary>
     private void OnEnable()
     {
-        //set each relevant input action
-        inputActions = new PlayerInputActions();
-        inputActions.Movement.AD.performed += ctx => { LR = ctx.ReadValue<float>(); };
-        inputActions.Movement.S.performed += ctx => { if (playerState == PlayerState.OnWall) { canAttachToWall = false; DetachFromWall(); } };
-        inputActions.Movement.Space.performed += Jump;
-        inputActions.Movement.HoldSpace.performed += Jump;
-        inputActions.Enable();
+        SetInputActions();
 
         rb = GetComponent<Rigidbody2D>();
     }
@@ -50,13 +54,25 @@ public class PlayerController : MonoBehaviour
         inputActions.Disable();
     }
 
+    /// <summary>
+    /// configures the inputs
+    /// </summary>
+    private void SetInputActions()
+    {
+        inputActions = new PlayerInputActions();
+        inputActions.Movement.AD.performed += ctx => { LR = ctx.ReadValue<float>(); };
+        inputActions.Movement.S.performed += ctx => { if (playerState == PlayerState.OnWall) { canAttachToWall = false; DetachFromWall(); } };
+        inputActions.Movement.Space.performed += Jump;
+        inputActions.Movement.HoldSpace.performed += Jump;
+        inputActions.Enable();
+    }
+
     private void FixedUpdate()
     {
-        isGrounded = TestForGround();
+        IsGrounded = TestForGround();
         playerState = SetState();
         playerWallState = TestForWalls();
 
-        //TODO - event based system
         SetAttachmentToWall();
         ApplyMotion();
     }
@@ -69,7 +85,7 @@ public class PlayerController : MonoBehaviour
         if (!isAttachedToWall)
         {
             //if in the air, controls will feel more sluggish due to drag
-            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, LR * movementScalar.x, (isGrounded) ? groundSteer : airSteer),
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, LR * movementScalar.x, (IsGrounded) ? groundSteer : airSteer),
                                         rb.velocity.y);
         }       
     }
@@ -81,13 +97,13 @@ public class PlayerController : MonoBehaviour
     private void Jump(InputAction.CallbackContext context)
     {
         //regular jump
-        if (isGrounded)
+        if (IsGrounded)
         {            
             rb.velocity = new Vector2(rb.velocity.x,
                           (context.interaction is HoldInteraction) ? movementScalar.y * highJump : movementScalar.y);
         }
         //wall jump
-        else if (!isGrounded && isAttachedToWall)
+        else if (!IsGrounded && isAttachedToWall)
         {
             rb.velocity = new Vector2((playerWallState == PlayerWallState.Right) ? -wallJump : wallJump, 
                           movementScalar.y * 1.2f);
@@ -102,24 +118,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void SetAttachmentToWall()
     {
-        //TODO - event based system here
-        //if the player is on the ground
-        if (isGrounded)
+        if (!IsGrounded && playerWallState != PlayerWallState.None)
         {
-            if (canAttachToWall == false)   canAttachToWall = true;
-            if (isAttachedToWall)           DetachFromWall();
+            AttachToWall();
         }
         //else if the player slips off the bottom of a wall
         else if (playerWallState == PlayerWallState.None && isAttachedToWall)
         {
             DetachFromWall();
             canAttachToWall = true;
-        }
-        //now the player can attach to walls
-        else if (playerWallState != PlayerWallState.None)
-        {
-            AttachToWall();
-        }                     
+        }                    
     }
 
     /// <summary>
@@ -178,7 +186,7 @@ public class PlayerController : MonoBehaviour
         {
             return PlayerState.OnWall;
         }
-        if (!isGrounded)
+        if (!IsGrounded)
         {
             return PlayerState.InAir;
         }
