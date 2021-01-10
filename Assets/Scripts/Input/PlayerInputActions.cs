@@ -32,7 +32,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""id"": ""137e9b14-da80-4dff-b4fe-abc2528f5d6f"",
                     ""expectedControlType"": ""Analog"",
                     ""processors"": """",
-                    ""interactions"": ""Hold(duration=0.2)""
+                    ""interactions"": ""Press""
                 },
                 {
                     ""name"": ""Space"",
