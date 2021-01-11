@@ -8,6 +8,9 @@ TextureImporter:
   - first:
       213: -1331473863589439779
     second: '!SANDBOX_bounce'
+  - first:
+      213: 4252486880854183530
+    second: '!SANDBOX_gradient'
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -132,6 +135,27 @@ TextureImporter:
       bones: []
       spriteID: dd6d8055397a58de0800000000000000
       internalID: -1331473863589439779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '!SANDBOX_gradient'
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6e8259994ed30b30800000000000000
+      internalID: 4252486880854183530
       vertices: []
       indices: 
       edges: []

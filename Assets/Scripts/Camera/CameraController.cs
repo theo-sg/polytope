@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour
     public Transform target;
 
     [Header("Camera Properties")]
-    //### object properties
+    //### object properties ###
     /// <summary>
     /// position offset to account for the 2D plane
     /// </summary>
