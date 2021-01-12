@@ -27,7 +27,9 @@ public class BouncePadBehaviour : MonoBehaviour
     /// <param name="rb">the contact rigibody</param>
     private void Bounce(Rigidbody2D rb, ContactPoint2D ct)
     {
-        Vector2 k = rb.position - ct.point;
+        Vector2 j = rb.position - ct.point;
+        float x = rb.position.x - transform.position.x;
+        
         Vector2 colliderSize = this.GetComponent<BoxCollider2D>().size;
         if (omnidirectional)
         {
@@ -38,9 +40,9 @@ public class BouncePadBehaviour : MonoBehaviour
         else
         {
             //if the player is above the pad
-            // |kx| will be less than or equal to the width of the collider - a small amount to stop corner hits / 2
+            // |x| will be less than or equal to the width of the collider / 2
             // ky will be more than or equal to the height of the collider / 2
-            if(Mathf.Abs(k.x) <= (colliderSize.x - 0.3f) / 2 && k.y >= colliderSize.y / 2)
+            if(Mathf.Abs(x) <= colliderSize.x / 2 && j.y >= colliderSize.y / 2)
             {
                 rb.AddForce(Vector2.up * strength, ForceMode2D.Impulse);
             }

@@ -33,9 +33,11 @@ public class PlayerController : MonoBehaviour
     public PlayerWallState playerWallState;
   
     //### player properties ###
-    private Vector2 groundCheckBox = new Vector2(0.6f, 0.2f);
+    private Vector2 groundCheckBox = new Vector2(0.3f, 0.2f);
     [HideInInspector]   public Vector2 movementScalar = new Vector2();
     [Header("Player Properties")]
+    float groundDistance = 0.8f;
+    float wallDistance = 0.31f;
     [Range(0, 1)]       public float airSteer = 0.1f;
     [Range(0, 1)]       public float groundSteer = 0.7f;
     [Range(1, 2)]       public float highJump = 1.4f;
@@ -47,6 +49,8 @@ public class PlayerController : MonoBehaviour
         SetInputActions();
 
         rb = GetComponent<Rigidbody2D>();
+
+        
     }
 
     private void OnDisable()
@@ -161,7 +165,7 @@ public class PlayerController : MonoBehaviour
     /// <returns>whether the player is grounded</returns>
     private bool TestForGround()
     {        
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position, groundCheckBox, 0, Vector2.down, 0.6f, 1 << LayerMask.NameToLayer("Ground"));       
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, groundCheckBox, 0, Vector2.down, groundDistance, 1 << LayerMask.NameToLayer("Ground"));       
         return (hit.collider != null) ? true : false;
     }
 
@@ -171,8 +175,8 @@ public class PlayerController : MonoBehaviour
     /// <returns>the position of the wall (left, right or no wall)</returns>
     private PlayerWallState TestForWalls()
     {
-        RaycastHit2D lHit = Physics2D.Raycast(transform.position, Vector2.left, 0.51f, 1 << LayerMask.NameToLayer("Ground"));
-        RaycastHit2D rHit = Physics2D.Raycast(transform.position, Vector2.right, 0.51f, 1 << LayerMask.NameToLayer("Ground"));
+        RaycastHit2D lHit = Physics2D.Raycast(transform.position, Vector2.left, wallDistance, 1 << LayerMask.NameToLayer("Ground"));
+        RaycastHit2D rHit = Physics2D.Raycast(transform.position, Vector2.right, wallDistance, 1 << LayerMask.NameToLayer("Ground"));
         return (lHit.collider != null) ? PlayerWallState.Left : ( (rHit.collider != null) ? PlayerWallState.Right : PlayerWallState.None );
     }
 

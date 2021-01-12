@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4786015415876995299}
   - component: {fileID: 4786015415876995298}
-  - component: {fileID: 4786015415876995297}
   - component: {fileID: 4786015415876995296}
+  - component: {fileID: 1025119094}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -52,26 +52,12 @@ MonoBehaviour:
   playerState: 0
   playerWallState: 0
   movementScalar: {x: 5, y: 5}
+  groundDistance: 1.25
+  wallDistance: 0.32
   airSteer: 0.07
   groundSteer: 0.3
   highJump: 1.6
   wallJump: 20
---- !u!58 &4786015415876995297
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4786015415876995301}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!50 &4786015415876995296
 Rigidbody2D:
   serializedVersion: 4
@@ -93,6 +79,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!70 &1025119094
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4786015415876995301}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.36}
+  m_Size: {x: 0.6, y: 1.78}
+  m_Direction: 0
 --- !u!1 &4786015415994405956
 GameObject:
   m_ObjectHideFlags: 0

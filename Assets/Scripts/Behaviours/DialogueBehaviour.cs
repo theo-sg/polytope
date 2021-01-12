@@ -22,6 +22,6 @@ public class DialogueBehaviour : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = Camera.main.WorldToScreenPoint(character.transform.position) + Vector3.up * 60f;
+        transform.position = Camera.main.WorldToScreenPoint(character.transform.position) + Vector3.up * 160f;
     }
 }
