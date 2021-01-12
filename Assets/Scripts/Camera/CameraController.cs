@@ -16,7 +16,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// position offset to account for the 2D plane
     /// </summary>
-    [HideInInspector] public Vector3 offset;
+    public Vector3 offset;
     /// <summary>
     /// interpolation factor
     /// </summary>
@@ -31,11 +31,6 @@ public class CameraController : MonoBehaviour
             Destroy(gameObject);
         }
         Instance = this;
-    }
-
-    public void OnEnable()
-    {
-        offset = new Vector3(0, 1.4f, -10);
     }
 
     public void FixedUpdate()
