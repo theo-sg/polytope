@@ -19,6 +19,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
             ""id"": ""626572a2-2f69-4c5a-b6ab-650820a071fc"",
             ""actions"": [
                 {
+                    ""name"": ""MousePos"",
+                    ""type"": ""Value"",
+                    ""id"": ""ac7370c2-53af-4c72-aa53-98bd24e0e3a3"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""AD"",
                     ""type"": ""PassThrough"",
                     ""id"": ""823e8466-6929-4c12-a566-4692358741a2"",
@@ -117,6 +125,17 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""S"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8fd1b8c-dbd2-4552-976d-68091c19b3d2"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePos"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -142,6 +161,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
 }");
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
+        m_Movement_MousePos = m_Movement.FindAction("MousePos", throwIfNotFound: true);
         m_Movement_AD = m_Movement.FindAction("AD", throwIfNotFound: true);
         m_Movement_S = m_Movement.FindAction("S", throwIfNotFound: true);
         m_Movement_Space = m_Movement.FindAction("Space", throwIfNotFound: true);
@@ -195,6 +215,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     // Movement
     private readonly InputActionMap m_Movement;
     private IMovementActions m_MovementActionsCallbackInterface;
+    private readonly InputAction m_Movement_MousePos;
     private readonly InputAction m_Movement_AD;
     private readonly InputAction m_Movement_S;
     private readonly InputAction m_Movement_Space;
@@ -203,6 +224,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     {
         private @PlayerInputActions m_Wrapper;
         public MovementActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MousePos => m_Wrapper.m_Movement_MousePos;
         public InputAction @AD => m_Wrapper.m_Movement_AD;
         public InputAction @S => m_Wrapper.m_Movement_S;
         public InputAction @Space => m_Wrapper.m_Movement_Space;
@@ -216,6 +238,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_MovementActionsCallbackInterface != null)
             {
+                @MousePos.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnMousePos;
+                @MousePos.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnMousePos;
+                @MousePos.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnMousePos;
                 @AD.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnAD;
                 @AD.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnAD;
                 @AD.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnAD;
@@ -232,6 +257,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
             m_Wrapper.m_MovementActionsCallbackInterface = instance;
             if (instance != null)
             {
+                @MousePos.started += instance.OnMousePos;
+                @MousePos.performed += instance.OnMousePos;
+                @MousePos.canceled += instance.OnMousePos;
                 @AD.started += instance.OnAD;
                 @AD.performed += instance.OnAD;
                 @AD.canceled += instance.OnAD;
@@ -259,6 +287,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     }
     public interface IMovementActions
     {
+        void OnMousePos(InputAction.CallbackContext context);
         void OnAD(InputAction.CallbackContext context);
         void OnS(InputAction.CallbackContext context);
         void OnSpace(InputAction.CallbackContext context);

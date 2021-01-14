@@ -6,6 +6,14 @@
             "id": "626572a2-2f69-4c5a-b6ab-650820a071fc",
             "actions": [
                 {
+                    "name": "MousePos",
+                    "type": "Value",
+                    "id": "ac7370c2-53af-4c72-aa53-98bd24e0e3a3",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "AD",
                     "type": "PassThrough",
                     "id": "823e8466-6929-4c12-a566-4692358741a2",
@@ -102,6 +110,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "S",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e8fd1b8c-dbd2-4552-976d-68091c19b3d2",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MousePos",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
