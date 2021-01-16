@@ -52,6 +52,9 @@ TagManager:
   - name: Entities
     uniqueID: 1929384189
     locked: 0
+  - name: Tools
+    uniqueID: 2550363917
+    locked: 0
   - name: UI
     uniqueID: 2727275287
     locked: 0

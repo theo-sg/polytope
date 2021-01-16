@@ -11,6 +11,9 @@ TextureImporter:
   - first:
       213: 4252486880854183530
     second: '!SANDBOX_gradient'
+  - first:
+      213: 6672092249654021906
+    second: '!SANDBOX_gun'
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -148,7 +151,7 @@ TextureImporter:
         width: 100
         height: 100
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -156,6 +159,27 @@ TextureImporter:
       bones: []
       spriteID: a6e8259994ed30b30800000000000000
       internalID: 4252486880854183530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '!SANDBOX_gun'
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 0
+        width: 39
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21fc3410d88089c50800000000000000
+      internalID: 6672092249654021906
       vertices: []
       indices: 
       edges: []

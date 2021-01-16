@@ -125,6 +125,90 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Tool",
+            "id": "a2151f15-533c-4f26-bfa4-83c599a33fb6",
+            "actions": [
+                {
+                    "name": "LMB",
+                    "type": "Button",
+                    "id": "0f56ca5e-d6b0-4405-b974-fd70c2ed9126",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "RMB",
+                    "type": "Button",
+                    "id": "09f1ab46-3d26-4937-a1cf-03aa7b1c8ee0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MMB",
+                    "type": "Button",
+                    "id": "a5f7a015-abd5-4cb8-9be6-9711864be506",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Scroll",
+                    "type": "PassThrough",
+                    "id": "ae0aa89b-1f3a-48e0-b695-a87e094263aa",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "35a829d0-8454-4d2d-afa7-8de0702449d0",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LMB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d0d0929-767f-4d1c-8ad0-d830c4fc8ce5",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RMB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0e85b17c-76f6-416d-856e-0debab557e99",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MMB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "03e2e5a1-6eec-4e53-86c9-4a633644281d",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

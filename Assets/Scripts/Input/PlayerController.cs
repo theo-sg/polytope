@@ -42,7 +42,6 @@ public class PlayerController : MonoBehaviour
     [Range(0, 1)]       public float groundSteer = 0.7f;
     [Range(1, 2)]       public float highJump = 1.4f;
     [Range(10, 50)]     public float wallJump = 25f;
-     public Vector2 mouseVector;
     
 
     private void OnEnable()
@@ -62,8 +61,7 @@ public class PlayerController : MonoBehaviour
     private void SetInputActions()
     {
         inputActions = new PlayerInputActions();
-        inputActions.Movement.MousePos.performed += ctx => {    Vector3 k = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
-                                                                mouseVector = new Vector2(k.x - transform.position.x, k.y - transform.position.y).normalized; };
+        
         inputActions.Movement.AD.performed += ctx => { LR = ctx.ReadValue<float>(); };
         inputActions.Movement.S.performed += ctx => { if (playerState == PlayerState.OnWall) { canAttachToWall = false; DetachFromWall(); } };
         inputActions.Movement.Space.performed += Jump;

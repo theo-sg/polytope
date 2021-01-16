@@ -138,6 +138,90 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Tool"",
+            ""id"": ""a2151f15-533c-4f26-bfa4-83c599a33fb6"",
+            ""actions"": [
+                {
+                    ""name"": ""LMB"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f56ca5e-d6b0-4405-b974-fd70c2ed9126"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""RMB"",
+                    ""type"": ""Button"",
+                    ""id"": ""09f1ab46-3d26-4937-a1cf-03aa7b1c8ee0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MMB"",
+                    ""type"": ""Button"",
+                    ""id"": ""a5f7a015-abd5-4cb8-9be6-9711864be506"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ae0aa89b-1f3a-48e0-b695-a87e094263aa"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""35a829d0-8454-4d2d-afa7-8de0702449d0"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LMB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d0d0929-767f-4d1c-8ad0-d830c4fc8ce5"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RMB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e85b17c-76f6-416d-856e-0debab557e99"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MMB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03e2e5a1-6eec-4e53-86c9-4a633644281d"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -166,6 +250,12 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Movement_S = m_Movement.FindAction("S", throwIfNotFound: true);
         m_Movement_Space = m_Movement.FindAction("Space", throwIfNotFound: true);
         m_Movement_HoldSpace = m_Movement.FindAction("HoldSpace", throwIfNotFound: true);
+        // Tool
+        m_Tool = asset.FindActionMap("Tool", throwIfNotFound: true);
+        m_Tool_LMB = m_Tool.FindAction("LMB", throwIfNotFound: true);
+        m_Tool_RMB = m_Tool.FindAction("RMB", throwIfNotFound: true);
+        m_Tool_MMB = m_Tool.FindAction("MMB", throwIfNotFound: true);
+        m_Tool_Scroll = m_Tool.FindAction("Scroll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -276,6 +366,63 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         }
     }
     public MovementActions @Movement => new MovementActions(this);
+
+    // Tool
+    private readonly InputActionMap m_Tool;
+    private IToolActions m_ToolActionsCallbackInterface;
+    private readonly InputAction m_Tool_LMB;
+    private readonly InputAction m_Tool_RMB;
+    private readonly InputAction m_Tool_MMB;
+    private readonly InputAction m_Tool_Scroll;
+    public struct ToolActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public ToolActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @LMB => m_Wrapper.m_Tool_LMB;
+        public InputAction @RMB => m_Wrapper.m_Tool_RMB;
+        public InputAction @MMB => m_Wrapper.m_Tool_MMB;
+        public InputAction @Scroll => m_Wrapper.m_Tool_Scroll;
+        public InputActionMap Get() { return m_Wrapper.m_Tool; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ToolActions set) { return set.Get(); }
+        public void SetCallbacks(IToolActions instance)
+        {
+            if (m_Wrapper.m_ToolActionsCallbackInterface != null)
+            {
+                @LMB.started -= m_Wrapper.m_ToolActionsCallbackInterface.OnLMB;
+                @LMB.performed -= m_Wrapper.m_ToolActionsCallbackInterface.OnLMB;
+                @LMB.canceled -= m_Wrapper.m_ToolActionsCallbackInterface.OnLMB;
+                @RMB.started -= m_Wrapper.m_ToolActionsCallbackInterface.OnRMB;
+                @RMB.performed -= m_Wrapper.m_ToolActionsCallbackInterface.OnRMB;
+                @RMB.canceled -= m_Wrapper.m_ToolActionsCallbackInterface.OnRMB;
+                @MMB.started -= m_Wrapper.m_ToolActionsCallbackInterface.OnMMB;
+                @MMB.performed -= m_Wrapper.m_ToolActionsCallbackInterface.OnMMB;
+                @MMB.canceled -= m_Wrapper.m_ToolActionsCallbackInterface.OnMMB;
+                @Scroll.started -= m_Wrapper.m_ToolActionsCallbackInterface.OnScroll;
+                @Scroll.performed -= m_Wrapper.m_ToolActionsCallbackInterface.OnScroll;
+                @Scroll.canceled -= m_Wrapper.m_ToolActionsCallbackInterface.OnScroll;
+            }
+            m_Wrapper.m_ToolActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @LMB.started += instance.OnLMB;
+                @LMB.performed += instance.OnLMB;
+                @LMB.canceled += instance.OnLMB;
+                @RMB.started += instance.OnRMB;
+                @RMB.performed += instance.OnRMB;
+                @RMB.canceled += instance.OnRMB;
+                @MMB.started += instance.OnMMB;
+                @MMB.performed += instance.OnMMB;
+                @MMB.canceled += instance.OnMMB;
+                @Scroll.started += instance.OnScroll;
+                @Scroll.performed += instance.OnScroll;
+                @Scroll.canceled += instance.OnScroll;
+            }
+        }
+    }
+    public ToolActions @Tool => new ToolActions(this);
     private int m_PCSchemeIndex = -1;
     public InputControlScheme PCScheme
     {
@@ -292,5 +439,12 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnS(InputAction.CallbackContext context);
         void OnSpace(InputAction.CallbackContext context);
         void OnHoldSpace(InputAction.CallbackContext context);
+    }
+    public interface IToolActions
+    {
+        void OnLMB(InputAction.CallbackContext context);
+        void OnRMB(InputAction.CallbackContext context);
+        void OnMMB(InputAction.CallbackContext context);
+        void OnScroll(InputAction.CallbackContext context);
     }
 }
